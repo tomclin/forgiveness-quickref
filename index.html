@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>饒恕速查</title>
+<meta name="description" content="放下報仇，不放下公道。心裡放手，關係慢慢來，是非照樣算。十二種處境的饒恕速查。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* 飛航事工 · 領袖建造體系 視覺規則 v2 §1：全系統單一 Noto Sans TC，靠字重分層，不混襯線體；
+   品牌主色松綠 + 金 + 暖紙底；平實（flat）、暖而簡、高可讀。
+   版面：手機單欄，摘要（一句 + 三件事）在前，再是可篩選的情況卡（如果 → 那麼 → 為什麼 → 怎麼做）。
+   明暗模式皆以主題感知 token 著色，暗色下不出現壓近黑的隱形字。 */
+:root{
+  color-scheme: light;
+  --bg:#f5f1e8;
+  --surface:#fbf8f1;
+  --ink:#23302c;
+  --muted:#6b6354;
+  --line:#d9d0bd;
+  --accent:#1f3d36;
+  --accent-soft:#f3ead6;
+  --on-accent:#ffffff;
+  --gold:#b8893a;
+  --warn:#8a4a00;
+  --warn-soft:#fbeed6;
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#131613;
+    --surface:#1c211a;
+    --ink:#e9eee3;
+    --muted:#a7ad9d;
+    --line:#333c30;
+    --accent:#9eb87a;
+    --accent-soft:#273024;
+    --on-accent:#131613;
+    --gold:#d9b873;
+    --warn:#f0bd72;
+    --warn-soft:#3a2c14;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#131613;
+  --surface:#1c211a;
+  --ink:#e9eee3;
+  --muted:#a7ad9d;
+  --line:#333c30;
+  --accent:#9eb87a;
+  --accent-soft:#273024;
+  --on-accent:#131613;
+  --gold:#d9b873;
+  --warn:#f0bd72;
+  --warn-soft:#3a2c14;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--font-body);font-size:16px;line-height:1.7;
+}
+main{max-width:680px;margin:0 auto;padding:28px 18px 56px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+.eyebrow{font-size:13px;letter-spacing:.24em;color:var(--gold);font-weight:700}
+.headline{font-weight:900;font-size:clamp(30px,8.5vw,44px);line-height:1.22;margin-top:8px;color:var(--accent);letter-spacing:.02em}
+.headline em{font-style:normal;color:var(--gold)}
+.sub{margin-top:10px;font-size:17px;color:var(--muted)}
+
+.layers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.layer{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:6px;padding:12px 12px 14px;display:flex;flex-direction:column;gap:4px}
+.layer .where{font-size:13px;color:var(--muted)}
+.layer .what{font-weight:700;font-size:20px;line-height:1.3;color:var(--accent)}
+.layer .note{font-size:14px;color:var(--muted);line-height:1.55}
+@media (max-width:460px){.layers{grid-template-columns:1fr}.layer{flex-direction:row;flex-wrap:wrap;align-items:baseline;column-gap:10px}.layer .note{flex-basis:100%}}
+
+.safety{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:4px;padding:12px 14px;font-size:15px}
+.safety strong{color:var(--warn)}
+
+.finder{display:flex;flex-direction:column;gap:12px}
+.finder h2{font-weight:700;font-size:22px;color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  font:inherit;font-size:15px;padding:7px 14px;border-radius:999px;cursor:pointer;
+  background:var(--surface);color:var(--ink);border:1px solid var(--line);
+}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:500}
+.search{
+  font:inherit;width:100%;padding:11px 14px;border-radius:6px;
+  background:var(--surface);color:var(--ink);border:1px solid var(--line);
+}
+.search::placeholder{color:var(--muted)}
+.chip:focus-visible,.search:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.count{font-size:14px;color:var(--muted)}
+
+.cards{display:flex;flex-direction:column;gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px}
+.card .who{align-self:flex-start;font-size:13px;color:var(--accent);background:var(--accent-soft);padding:2px 10px;border-radius:999px}
+.card h3{font-weight:700;font-size:20px;line-height:1.4;color:var(--ink)}
+.card h3 span,.row .k{color:var(--muted);font-weight:500;font-size:13px;letter-spacing:.08em;display:block;margin-bottom:2px}
+.then{background:var(--accent-soft);border-radius:6px;padding:10px 12px;font-weight:500}
+.then .k{color:var(--accent)}
+.row ul{margin:0;padding-left:1.2em}
+.row li+li{margin-top:2px}
+.refs{display:flex;flex-wrap:wrap;gap:6px;padding-top:10px;border-top:1px solid var(--line)}
+.ref{font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 8px;font-variant-numeric:tabular-nums}
+a.ref{color:var(--accent);border-color:var(--accent);text-decoration:none}
+a.ref:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+footer a{color:var(--accent)}
+.empty{padding:20px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:8px}
+
+footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:8px}
+footer h2{font-size:15px;color:var(--ink);font-weight:700}
+footer ul{margin:0;padding-left:1.2em}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">饒恕速查</p>
+    <h1 class="headline">放下報仇，<br><em>不放下公道。</em></h1>
+    <p class="sub">心裡放手，關係慢慢來，是非照樣算。</p>
+  </header>
+
+  <section class="layers" aria-label="饒恕的三件事">
+    <div class="layer"><span class="where">心裡</span><span class="what">放手</span><span class="note">不報復。怨恨可以慢慢放下，不用等對方道歉。</span></div>
+    <div class="layer"><span class="where">關係</span><span class="what">慢慢來</span><span class="note">和好是方向，但要對方認錯、補償，信任才回得來。</span></div>
+    <div class="layer"><span class="where">公道</span><span class="what">照樣算</span><span class="note">該調解就調解，該報警就報警。</span></div>
+  </section>
+
+  <p class="safety"><strong>如果你現在有危險：</strong>先離開現場並求助。緊急狀況撥 110；家暴、性侵害可撥 113 保護專線。饒恕可以之後再談。</p>
+
+  <section class="finder">
+    <h2>你現在的情況是？</h2>
+    <div class="chips" id="chips" role="group" aria-label="依身分篩選"></div>
+    <input class="search" id="q" type="search" placeholder="輸入關鍵字，例如：道歉、報警、和好" aria-label="搜尋情況">
+    <p class="count" id="count" aria-live="polite"></p>
+  </section>
+
+  <section class="cards" id="cards"></section>
+
+  <footer>
+    <h2>使用說明</h2>
+    <ul>
+      <li>這是一份整理，幫助你找到方向，不能取代牧者、輔導或法律專業的協助。</li>
+      <li>「放手」和「饒恕」在這裡分兩層：心裡的放手不用等對方，是你和神之間的事；關係的和好則要看對方認錯、改變，需要時間，兩個人一起走。</li>
+      <li>教會傳統對一些問題看法不同，例如饒恕是否要等對方悔改、信徒能不能打官司。這裡提供一種讀法；不同教會傳統對部分問題仍有不同理解。</li>
+      <li>點經文標籤可開啟和合本原文（YouVersion 新標點和合本）。請連同上下文一起讀。</li>
+      <li>110 報案電話由內政部警政署受理：<a href="https://www.npa.gov.tw/ch/app/artwebsite/view?module=artwebsite&id=1048&serno=e3ad2889-4dee-41cf-aef8-9b9d26dc6950" target="_blank" rel="noopener">警政署說明</a>。113 保護專線由衛生福利部提供，24 小時受理家庭暴力、性侵害與兒少保護：<a href="https://mohw.gov.tw/cp-16-22223-1.html" target="_blank" rel="noopener">衛福部說明</a>。</li>
+    </ul>
+  </footer>
+</main>
+
+<script>
+const TAGS = [
+  {id:"all",   label:"全部"},
+  {id:"hurt",  label:"我受傷了"},
+  {id:"did",   label:"我傷了人"},
+  {id:"side",  label:"我在旁邊"},
+  {id:"group", label:"群體之間"}
+];
+const WHO = {hurt:"我受傷了", did:"我傷了人", side:"我在旁邊", group:"群體之間"};
+
+const CARDS = [
+  {tags:["hurt"],
+   iff:"我剛被傷害，還很痛、很氣",
+   then:"先不用急著說「我原諒」。把委屈和憤怒誠實告訴神。",
+   why:"聖經收錄了很多喊冤的禱告，有些話說得很重，可見向神訴苦是被容許的。向神喊冤，本身就是把報應交給神，不自己動手。",
+   how:["把發生的事和感受寫下來，或說給神聽","找一位可信任的人陪你","給自己時間，進度由你和神決定"],
+   refs:["詩 13","詩 109","羅 12:19"]},
+  {tags:["hurt"],
+   iff:"對方從來沒有道歉",
+   then:"你仍然可以在心裡放手，但不需要跟他和好。",
+   why:"放下，是為了不讓這件事繼續佔據你。和好需要兩個人，他不認錯，路就還沒通。",
+   how:["向神說：「這筆帳我交給祢」","不自行報復；要補償、返還或法律協助，走公正管道","保持你需要的距離"],
+   refs:["羅 12:19","路 17:3","羅 12:18"]},
+  {tags:["hurt"],
+   iff:"對方真心道歉，也願意補償",
+   then:"朝和好走，信任可以慢慢重建。",
+   why:"和好是神要的方向。但信任靠時間和行動累積，不是一句話就恢復。",
+   how:["接受他的道歉","說清楚你需要什麼補償和改變","一步一步恢復往來，不必一次回到從前"],
+   refs:["路 17:3-4","路 19:8","提後 4:11"]},
+  {tags:["hurt"],
+   iff:"對方一再重犯",
+   then:"可以饒恕，同時設下界線。保持距離不等於不饒恕。",
+   why:"饒恕是放下怨恨，不是讓他繼續傷害你。讓他一直犯錯，對他也不是好事。",
+   how:["明確說出底線和後果","必要時減少或停止接觸","請第三方介入"],
+   refs:["太 18:15-17","路 17:3"]},
+  {tags:["hurt","side"],
+   iff:"事情涉及暴力、性侵害、詐騙或其他犯罪",
+   then:"先確保安全，報警或求助。這和饒恕不衝突。",
+   why:"聖經說政府有責任懲治惡行，保羅自己也用法律保護過自己。心裡饒恕和法律追究是兩回事。",
+   how:["有立即危險撥 110","家暴、性侵害撥 113 保護專線","保留證據","教會內部調解不能取代報案"],
+   refs:["羅 13:4","徒 25:11"]},
+  {tags:["hurt"],
+   iff:"和教會的弟兄姊妹有金錢或財物上的小糾紛",
+   then:"先找教會裡公正的第三人調解。你若承擔得起，也可以選擇吃虧。",
+   why:"保羅希望信徒之間的小事在內部解決，不要為小利對簿公堂。他同時責備佔人便宜的那一方。",
+   how:["請雙方都信任的人來評理","把事實和金額攤開","吃虧是你的自由選擇，別人不能替你決定","教會若沒有公正的調解，這一條就不適用","這只談一般糾紛。遇到暴力、性侵害或詐騙，照樣報警"],
+   refs:["林前 6:1-8"]},
+  {tags:["hurt"],
+   iff:"有人拿經文催我「你要趕快饒恕」",
+   then:"饒恕是你和神之間的事，時間不由別人決定。",
+   why:"「不饒恕人，天父也不饒恕你」是耶穌要每個人省察自己的話，不是用來壓受傷者的工具。只對受害者講饒恕、不對犯錯者講責任，就偏了。",
+   how:["可以回答：「我正在這條路上」","可以問：「那他的責任呢？」","找願意陪伴而不催促的人"],
+   refs:["太 6:14-15","路 17:3","耶 6:14"]},
+  {tags:["hurt"],
+   iff:"我就是不想饒恕",
+   then:"誠實承認，然後回頭想想自己被赦免了多少。",
+   why:"在耶穌的比喻裡，王先免了僕人還不起的巨債，才期待他免別人的小債。饒恕不是換取救恩的條件，是被赦免的人會長出來的樣子。",
+   how:["從一句誠實的禱告開始：「我還做不到，求祢幫我願意」","先做到不報復","若痛苦一直影響生活，找可信任的人或牧者陪你，不必獨自撐"],
+   refs:["太 18:21-35","弗 4:32"]},
+  {tags:["hurt"],
+   iff:"聖經說要愛仇敵，我做不到",
+   then:"愛仇敵是為他禱告、不咒詛他。不是喜歡他，也不是靠近他。",
+   why:"這裡的愛是願意對方變好，包括願他悔改。耶穌仍然稱他為「仇敵」，沒有要你假裝沒事。",
+   how:["為他禱告一句，就算開始","不散播、不報復","可以保持距離，也可以同時追究責任"],
+   refs:["路 6:27-28","羅 12:20","約 18:23"]},
+  {tags:["did"],
+   iff:"我是傷害別人的那一方",
+   then:"主動去認錯、補償。不能用「神已經赦免我了」帶過。",
+   why:"神赦免你，不等於對方的損失消失了。耶穌說，先去跟弟兄和好，再來獻禮物。",
+   how:["具體說出自己做錯什麼，不找藉口","問對方需要什麼補償，並且做到","接受對方需要時間，不要求他立刻原諒","該負的法律責任照樣負"],
+   refs:["太 5:23-24","路 19:8"]},
+  {tags:["side"],
+   iff:"我是牧者、小組長或朋友，想幫忙",
+   then:"陪伴受傷的人，不催他。對犯錯的人講清楚責任。",
+   why:"同一句經文，由誰說、對誰說、什麼時候說，效果完全不同。太快宣告「沒事了」，只會讓傷口更深。把受苦怪到當事人頭上，神也責備過。",
+   how:["先聽，不急著給答案","確保他有安全和求助的管道","不要求雙方立刻見面和好","問自己：這樣處理，得幫助的是受傷的人，還是想讓事情趕快過去的人？"],
+   refs:["耶 6:14","伯 42:7","加 2:11-14"]},
+  {tags:["group"],
+   iff:"是群體之間的隔閡，例如族群、階級、立場不同",
+   then:"在教會裡，這道牆已經被基督拆了，不該再把人分等級。有不公平，就用制度補上。",
+   why:"基督使原本隔絕的兩群人成為一體。但早期教會發現有人被忽略時，是設立專人處理，沒有只喊合一。",
+   how:["找出哪些做法在排除人，把它改掉","被虧待的一方要得到實際的補救","看見有人把牆砌回去，要當面指出來"],
+   refs:["弗 2:14-16","徒 6:1-6","加 2:11-14"]}
+];
+
+const BOOK = {"詩":"PSA","羅":"ROM","路":"LUK","提後":"2TI","太":"MAT","徒":"ACT","林前":"1CO","耶":"JER","弗":"EPH","約":"JHN","伯":"JOB","加":"GAL"};
+function refUrl(r){
+  const m = r.match(/^(\S+)\s+(\d+)(?::([\d-]+))?$/);
+  if(!m || !BOOK[m[1]]) return null;
+  return "https://www.bible.com/bible/46/" + BOOK[m[1]] + "." + m[2] + (m[3] ? "." + m[3] : "") + ".CUNP";
+}
+
+let active = "all";
+const chipsEl = document.getElementById("chips");
+const cardsEl = document.getElementById("cards");
+const qEl = document.getElementById("q");
+const countEl = document.getElementById("count");
+
+function el(tag, cls, text){
+  const e = document.createElement(tag);
+  if(cls) e.className = cls;
+  if(text != null) e.textContent = text;
+  return e;
+}
+
+TAGS.forEach(t => {
+  const b = el("button","chip",t.label);
+  b.type = "button";
+  b.dataset.id = t.id;
+  b.setAttribute("aria-pressed", String(t.id === active));
+  b.addEventListener("click", () => {
+    active = t.id;
+    chipsEl.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.id === active)));
+    render();
+  });
+  chipsEl.appendChild(b);
+});
+
+function row(label, body, cls){
+  const r = el("div","row" + (cls ? " " + cls : ""));
+  r.appendChild(el("span","k",label));
+  if(Array.isArray(body)){
+    const ul = el("ul");
+    body.forEach(s => ul.appendChild(el("li",null,s)));
+    r.appendChild(ul);
+  } else {
+    r.appendChild(el("p",null,body));
+  }
+  return r;
+}
+
+function render(){
+  const q = qEl.value.trim().toLowerCase();
+  const list = CARDS.filter(c => {
+    if(active !== "all" && !c.tags.includes(active)) return false;
+    if(!q) return true;
+    const hay = [c.iff, c.then, c.why, c.how.join(" "), c.refs.join(" ")].join(" ").toLowerCase();
+    return hay.includes(q);
+  });
+  cardsEl.textContent = "";
+  if(!list.length){
+    cardsEl.appendChild(el("p","empty","找不到符合的情況。試試別的關鍵字，或點「全部」。"));
+  }
+  list.forEach(c => {
+    const card = el("article","card");
+    card.appendChild(el("span","who", c.tags.map(t => WHO[t]).join("・")));
+    const h = el("h3");
+    h.appendChild(el("span",null,"如果"));
+    h.appendChild(document.createTextNode(c.iff));
+    card.appendChild(h);
+    card.appendChild(row("那麼", c.then, "then"));
+    card.appendChild(row("為什麼", c.why));
+    card.appendChild(row("怎麼做", c.how));
+    const refs = el("div","refs");
+    refs.setAttribute("aria-label","經文");
+    c.refs.forEach(r => {
+      const u = refUrl(r);
+      const a = el(u ? "a" : "span", "ref", r);
+      if(u){ a.href = u; a.target = "_blank"; a.rel = "noopener"; }
+      refs.appendChild(a);
+    });
+    card.appendChild(refs);
+    cardsEl.appendChild(card);
+  });
+  countEl.textContent = "共 " + list.length + " 種情況";
+}
+
+qEl.addEventListener("input", render);
+render();
+</script>
+</body>
+</html>
